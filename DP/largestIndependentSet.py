@@ -1,6 +1,13 @@
 """
-Given a binary tree, return the size of the largest independent set of nodes such that
-no two nodes are connected.
+    Given a binary tree, return the size of the largest independent set of nodes such that
+    no two nodes are connected.
+
+    For any node, if I don't consider the node in my largest set of independent nodes, 
+    I can add the count of subsets with subtrees rooted with node.left and node.right.
+    Now if I consider the node, I cannot put node.left or node.right as they are directly
+    connected. I'll consider root.left.left, root.left.right, root.right.left and 
+    root.right.right (obviously only if left and right != None).
+
 """
 
 class node:
@@ -27,7 +34,9 @@ def largestIndependentSet(root):
         lis_including_node += (largestIndependentSet(root.left.left)+largestIndependentSet(root.left.right))
     if root.right != None:
         lis_including_node += (largestIndependentSet(root.right.left)+largestIndependentSet(root.right.right))
+        
     root.lis = max(lis_including_node, lis_excluding_node)
+
     return root.lis
 
 if __name__ == '__main__':
