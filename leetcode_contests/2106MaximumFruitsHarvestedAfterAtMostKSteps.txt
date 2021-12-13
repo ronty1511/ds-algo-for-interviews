@@ -1,0 +1,42 @@
+long long max(long long a, long long b) {
+        if (a > b)  return a;
+        return b;
+    }
+    int maxTotalFruits(vector<vector<int>>& fruits, int startPos, int k) {
+        vector<long long> arr(200001, 0);
+        int n = fruits.size();
+        for (int i = 0; i < n; i++) {
+            arr[fruits[i][0]] += fruits[i][1];
+        }
+        if (k == 0)
+            return arr[startPos];
+        for (int i = 1; i < 200001; i++) {
+            arr[i] += arr[i - 1];
+        }
+        int res = 0;
+        int l = 0, r = k;        
+        while (r > 0) {
+            int r_idx = min(200000, startPos + r);
+            int l_idx = startPos - l - 1;
+            if (l_idx < 0) {
+                res = max(res, arr[r_idx]);
+            } else {
+                res = max(res, arr[r_idx] - arr[l_idx]);
+            }
+            l++;
+            r -= 2;
+        }
+        l = k, r = 0;
+        while (l > 0) {
+            int r_idx = min(200000, startPos + r);
+            int l_idx = startPos - l - 1;
+            if (l_idx < 0) {
+                res = max(res, arr[r_idx]);
+            } else {
+                res = max(res, arr[r_idx] - arr[l_idx]);
+            }
+            r++;
+            l -= 2;
+        }
+        return res;
+    }

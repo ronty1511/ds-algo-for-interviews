@@ -1,0 +1,32 @@
+unordered_set<int> getIndices(vector<int>& a, int time) {
+        unordered_set<int> s;
+        int n = a.size();
+        int i = 0;
+        for (int j = 1; j < n; j++) {
+            if (a[j] <= a[j - 1]) {
+                if (j - i >= time)
+                    s.insert(j);
+                continue;                
+            }
+            i = j;
+        }
+        return s;
+    }
+    vector<int> goodDaysToRobBank(vector<int>& security, int time) {
+        int n = security.size();
+        vector<int> res;
+        if (time == 0) {
+            for (int i = 0; i < n; i++)
+                res.push_back(i);
+            return res;
+        }
+        unordered_set<int> lr = getIndices(security, time);
+        reverse(security.begin(), security.end());
+        unordered_set<int> rl = getIndices(security, time);
+        for (auto i : lr) {
+            cout << i << " ";
+            if (i >= time and i < n - time and rl.find(n - i - 1) != rl.end())
+                res.push_back(i);
+        }
+        return res;
+    }
